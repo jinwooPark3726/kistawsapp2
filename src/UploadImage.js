@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import AWS from 'aws-sdk'
 
-const S3_BUCKET = 'kistawsbucket';
+const S3_BUCKET = 'mykistawsbucket';
 const REGION = 'ap-northeast-2';
 
 
 AWS.config.update({
-    accessKeyId: 'AKIAZSQZBZDAINMAO6GK',
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAWSF5CQBTX7DBTSFT',
+    secretAccessKey: '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'
 })
 
 const myBucket = new AWS.S3({

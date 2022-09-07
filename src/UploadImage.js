@@ -3,13 +3,13 @@ import AWS from 'aws-sdk'
 import axios from 'axios';
 
 
-const S3_BUCKET = 'mykistawsbucket';
-const REGION = 'ap-northeast-2';
+const S3_BUCKET = 'kistawsbucket-kr'
+const REGION = 'ap-northeast-2'
 
-
+// 
 AWS.config.update({
-    accessKeyId: 'AKIAWSF5CQBTX7DBTSFT',
-    secretAccessKey: '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'
+    accessKeyId: process.env.REACT_APP_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_SECRET_KEY
 })
 
 const myBucket = new AWS.S3({
@@ -52,6 +52,7 @@ const UploadImage = () => {
       var dateString = year+ month  + day +'_' + hours + minutes + seconds;
       
       console.log(dateString.slice(2));
+      
         // const formData = new FormData();
         // formData.append(
         //     "test file",
@@ -69,7 +70,7 @@ const UploadImage = () => {
             ACL: 'public-read',
             Body: file,
             Bucket: S3_BUCKET,
-            Key: 'images/' + id1 + '/'+ dateString.slice(2) + '_' + file.name
+            Key: id1 + '/'+ dateString.slice(2) + '_' + file.name
         };
 
         console.log(params.Key)

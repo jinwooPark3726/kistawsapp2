@@ -4,6 +4,8 @@ import axios from 'axios';
 
 
 const S3_BUCKET = 'kistawsbucket-kr'
+const S3_BUCKET_TMP2 = 'kisttmp2-kr'
+const S3_BUCKET_TMP3 = 'kisttmp3-kr'
 const REGION = 'ap-northeast-2'
 
 // 
@@ -25,6 +27,7 @@ const UploadImage = () => {
 
     const [id1, setID1] = useState(null);
     const [id2, setID2] = useState(null);
+    const [id3, setID3] = useState(null);
 
     const [retValue1, setRetValue1] = useState(0);
     const [retValue2, setRetValue2] = useState(0);
@@ -35,7 +38,11 @@ const UploadImage = () => {
     const handleFileInput = (e) => {
         setSelectedFile(e.target.files[0]);
         setProgress1('0');
+        setProgress2('0');
+        setProgress3('0');
         setRetValue1('')
+        setRetValue2('')
+        setRetValue3('')
        // setProgress2 = 0;
        // setProgress3 = 0;
     }
@@ -90,12 +97,24 @@ const UploadImage = () => {
     }
 
     const uploadFile2 = (file) => {
+        
 
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var hours = ('0' + today.getHours()).slice(-2); 
+        var minutes = ('0' + today.getMinutes()).slice(-2);
+        var seconds = ('0' + today.getSeconds()).slice(-2); 
+        var dateString = year+ month  + day +'_' + hours + minutes + seconds;
+        
+        console.log(dateString.slice(2));
+        
         const params = {
             ACL: 'public-read',
             Body: file,
-            Bucket: S3_BUCKET,
-            Key: file.name
+            Bucket: S3_BUCKET_TMP2,
+            Key: id2 + '/'+ dateString.slice(2) + '_' + file.name
         };
 
         myBucket.putObject(params)
@@ -105,14 +124,41 @@ const UploadImage = () => {
             .send((err) => {
                 if (err) console.log(err)
             })
+            // file.
+            // myBucket.getObject
+           
+        // myBucket.getObject(params, (err, data) => {
+        //         if (err) {
+        //           console.log(err, err.stack);
+        //         } else {
+        //           console.log(data.Body.toString());
+        //         }
+            
+        //     });
+         
     }
-    const uploadFile3 = (file) => {
+      
+          
+     
 
+    
+    const uploadFile3 = (file) => {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var hours = ('0' + today.getHours()).slice(-2); 
+        var minutes = ('0' + today.getMinutes()).slice(-2);
+        var seconds = ('0' + today.getSeconds()).slice(-2); 
+        var dateString = year+ month  + day +'_' + hours + minutes + seconds;
+        
+        console.log(dateString.slice(2));
+        
         const params = {
             ACL: 'public-read',
             Body: file,
-            Bucket: S3_BUCKET,
-            Key: file.name
+            Bucket: S3_BUCKET_TMP3,
+            Key: id3 + '/'+ dateString.slice(2) + '_' + file.name
         };
 
         myBucket.putObject(params)
@@ -123,6 +169,7 @@ const UploadImage = () => {
                 if (err) console.log(err)
                 
             })
+            setRetValue3('10')
     }
 
     
@@ -142,19 +189,6 @@ const UploadImage = () => {
                     console.log(e)
                     setID1(e.target.value)
                     console.log(id1)
-
-
-                    var today = new Date();
-
-                    var year = today.getFullYear();
-                    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-                    var day = ('0' + today.getDate()).slice(-2);
-                    var hours = ('0' + today.getHours()).slice(-2); 
-                    var minutes = ('0' + today.getMinutes()).slice(-2);
-                    var seconds = ('0' + today.getSeconds()).slice(-2); 
-                    var dateString = year+ month  + day +'_' + hours + minutes + seconds;
-                    
-                    console.log(dateString.slice(2));
                 }
             }
         
@@ -173,17 +207,26 @@ const UploadImage = () => {
         <p>Image File Upload Progress {progress2}%</p>
         <input type="file" onChange={handleFileInput} />
         <button onClick={() => uploadFile2(selectedFile)}> Upload</button>
-        <h1></h1>
+        <p>
         <input
             type="text"
-            name="message"
-            placeholder="return value"
+            name="id2"
+            placeholder="ID"
             onChange={
                 (e) => {
-                    console.log(e)
+                        console.log(e)
+                        setID2(e.target.value)
+                        console.log(id2)
+                    }
                 }
-            }
+            
         />
+        </p>
+        <div>  
+            <b>리턴값  : </b>
+            {retValue2}
+        </div>
+        
         <hr/>
 
 
@@ -193,18 +236,24 @@ const UploadImage = () => {
         <input type="file" onChange={handleFileInput} />
         <button onClick={() => uploadFile3(selectedFile)}> Upload</button>
         <h1></h1>
+        <p>
         <input
             type="text"
-            name="message"
-            placeholder="return value"
+            name="id3"
+            placeholder="ID"
             onChange={
-                (e) => {
+                (e) =>  {
                     console.log(e)
-                    setID1(e.target.value)
-                    console.log(id1)
+                    setID3(e.target.value)
+                    console.log(id3)
                 }
             }
-        />
+        /></p>
+        <div>  
+            <b>리턴값  : </b>
+            {retValue3}
+        </div>
+        
         <hr/>
     </div>
 

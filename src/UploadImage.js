@@ -107,7 +107,7 @@ const UploadImage = () => {
                 }
 
             })
-        }, 8000);
+        }, 60000);
 
     }
 
@@ -186,7 +186,7 @@ const UploadImage = () => {
                 }
 
             })
-        }, 12000);
+        }, 60000);
 
     }
 
@@ -271,7 +271,7 @@ const UploadImage = () => {
 
 
     return <div className='KistMain'>
-        <h2>기능 1. 등록 </h2>
+        <h2>등록 </h2>
         <p>Image File Upload Progress {progress1}%</p>
         <input type="file" onChange={handleFileInput} />
         <button onClick={() => uploadFile1(selectedFile)}> Upload</button>
@@ -299,7 +299,7 @@ const UploadImage = () => {
         <br></br>
         <br></br>
 
-        <h2>기능 2. 인증(1:1) </h2>
+        <h2>인증(1:1) </h2>
         <p>Image File Upload Progress {progress2}%</p>
         <input type="file" onChange={handleFileInput2} />
         <button onClick={() => uploadFile2(selectedFile2)}> Upload</button>
@@ -321,10 +321,9 @@ const UploadImage = () => {
             <b>리턴값  : </b>
             {retValue2}
         </div>
-
-        <hr />
-
-
+        
+        <hr></hr>
+        {/* <hr />
         <br></br><br></br>
         <h2>기능 3. 인식(1:N)</h2>
         <p>Image File Upload Progress {progress3}%</p>
@@ -337,8 +336,8 @@ const UploadImage = () => {
             <b>리턴값  : </b>
             {retValue3}
         </div>
-
-        <hr />
+        <hr /> */}
+        
     </div>
 
 }

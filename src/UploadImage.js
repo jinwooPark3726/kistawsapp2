@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AWS from 'aws-sdk'
 import axios from 'axios';
+import { isString } from 'util';
 
 
 const S3_BUCKET = 'kistawsbucket-kr'
@@ -59,7 +60,7 @@ const UploadImage = () => {
     }
 
     const uploadFile1 = (file) => {
-
+        setRetValue1('');
         var today = new Date();
         var year = today.getFullYear();
         var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -93,27 +94,54 @@ const UploadImage = () => {
                 }
             })
 
-        setTimeout(() => {
+        var res = 0;
+        let timer;
+        let timer_interval = setInterval(() => {
             myBucket.listObjects(params_output, function (err, data) {
                 if (err) {
                     console.log("Error", err);
-                    setRetValue1('Upload Failed');
+                    //setRetValue1('Upload Failed');
                 } else {
-                    console.log("Upload Success")
-                    if (data.Contents.length)
-                        setRetValue1('Upload completed');
-                    console.log("Image & vector upload Success");
 
+                    if (data.Contents.length) {
+                        res = 1;
+                        console.log("Image & vector upload Success");
+                        setRetValue1('Registration done');
+                        clearInterval(timer_interval);
+                        clearTimeout(timer);
+                    }
                 }
-
             })
+        }, 5000);
+
+        timer = setTimeout(() => {
+            clearInterval(timer);
+            if (!res)
+                setRetValue1('Registration failed');
         }, 60000);
+
+
+        // setTimeout(() => {
+        //     myBucket.listObjects(params_output, function (err, data) {
+        //         if (err) {
+        //             console.log("Error", err);
+        //             setRetValue1('Upload Failed');
+        //         } else {
+        //             console.log("Upload Success")
+        //             if (data.Contents.length)
+        //                 setRetValue1('Upload completed');
+        //             console.log("Image & vector upload Success");
+
+        //         }
+
+        //     })
+        // }, 60000);
 
     }
 
     const uploadFile2 = (file) => {
 
-
+        setRetValue2('');
         var today = new Date();
         var year = today.getFullYear();
         var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -157,36 +185,82 @@ const UploadImage = () => {
                     console.log("Upload Success")
             })
 
-
-        setTimeout(() => {
+        var res = 0;
+        var strNoID = "-999"
+        var strData;
+        let timer;
+        let timer_interval = setInterval(() => {
             myBucket.listObjects(params_list, function (err, data) {
                 if (err) {
                     console.log("Error", err);
-                    setRetValue2('Upload Failed');
                 } else {
-
+                    console.log("list contents length ", data.Contents.length);
                     if (data.Contents.length) {
-                        myBucket.getObject(params_output, function (err, data) {
 
+                        myBucket.getObject(params_output, function (err, data) {
+                            console.log("getobject");
                             if (err) {
                                 console.log("Error", err);
+                                setRetValue1('Error GetObject');
                             }
-                            setRetValue2(data.Body.toString());
-                            console.log(data.Body.toString());
+                            res = 1;
+                            strData = data.Body.toString();
+                            strData = strData.slice(0, 4)
+
+                            if (strData == strNoID) {
+                                console.log(strData);
+                                setRetValue2('No Comparison ID');
+                            }
+                            else {
+                                setRetValue2(data.Body.toString());
+                            }
+                            clearInterval(timer_interval);
+                            clearTimeout(timer);
                         })
 
-
                     }
-                    else {
-                        setRetValue2('No comparison ID');
-                        console.log('No comparison ID');
-                    }
-
 
                 }
-
             })
+        }, 5000);
+
+        timer = setTimeout(() => {
+            clearInterval(timer_interval);
+            if (!res)
+                setRetValue2('Error Processing');
         }, 60000);
+
+
+
+        // setTimeout(() => {
+        //     myBucket.listObjects(params_list, function (err, data) {
+        //         if (err) {
+        //             console.log("Error", err);
+        //             setRetValue2('Upload Failed');
+        //         } else {
+
+        //             if (data.Contents.length) {
+        //                 myBucket.getObject(params_output, function (err, data) {
+
+        //                     if (err) {
+        //                         console.log("Error", err);
+        //                     }
+        //                     setRetValue2(data.Body.toString());
+        //                     console.log(data.Body.toString());
+        //                 })
+
+
+        //             }
+        //             else {
+        //                 setRetValue2('No comparison ID');
+        //                 console.log('No comparison ID');
+        //             }
+
+
+        //         }
+
+        //     })
+        // }, 60000);
 
     }
 
@@ -321,7 +395,7 @@ const UploadImage = () => {
             <b>리턴값  : </b>
             {retValue2}
         </div>
-        
+
         <hr></hr>
         {/* <hr />
         <br></br><br></br>
@@ -337,7 +411,7 @@ const UploadImage = () => {
             {retValue3}
         </div>
         <hr /> */}
-        
+
     </div>
 
 }

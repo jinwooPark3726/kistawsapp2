@@ -1,8 +1,8 @@
 import './App.css';
-import UploadImage from './UploadImage.js';
+
 function App() {
   return (
-  <UploadImage/>
+   <button>hello</button>
   );
 }
 
